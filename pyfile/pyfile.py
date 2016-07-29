@@ -1,12 +1,13 @@
 import os
 import re
+import json
 import shutil
 import hashlib
 import unicodedata
 from functools import partial
 
 
-__all__ = ['pyfile', 'File', 'Directory']
+__all__ = ['pyfile', 'File', 'Directory', 'Json']
 
 
 def pyfile(file_path):
@@ -219,3 +220,40 @@ class Directory(File):
 
     def is_dir(self):
         return True
+
+
+class Json(File):
+    def __init__(self, file_path):
+        File.__init__(self, file_path)
+
+    def __str__(self):
+        return '%s\n%s' % (self.path,
+                           json.dumps(self, indent=4, separators=(',', ': '), ensure_ascii=False, sort_keys=True))
+
+    @staticmethod
+    def from_path(file_path):
+        try:
+            json_value = json.load(open(file_path))
+        except Exception as e:
+            return None
+
+        if type(json_value) is dict:
+            return _Dict(file_path)
+
+        return _List(file_path)
+
+    def dump(self):
+        json.dump(self, open(self.path, 'w', encoding='utf8'),
+                  indent=4, separators=(',', ': '), ensure_ascii=False, sort_keys=True)
+
+
+class _Dict(Json, dict):
+    def __init__(self, file_path):
+        Json.__init__(self, file_path)
+        dict.__init__(self, json.load(open(self.path)) if self.is_exists() else {})
+
+
+class _List(Json, list):
+    def __init__(self, file_path):
+        File.__init__(self, file_path)
+        list.__init__(self, json.load(open(self.path)) if self.is_exists() else [])

@@ -1,1 +1,1 @@
-from pyfile.pyfile import pyfile, File, Directory
+from pyfile.pyfile import *

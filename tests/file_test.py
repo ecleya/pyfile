@@ -12,3 +12,6 @@ class TestFile(unittest.TestCase):
         self.assertEqual(file.name, 'dict.json')
         self.assertEqual(file.body.path, DATA_ROOT)
         self.assertEqual(file.extension, '.json')
+
+    def test_not_exists_file(self):
+        self.assertRaises(FileNotFoundError, pyfile, os.path.join(DATA_ROOT, 'not exists.txt'))
