@@ -228,7 +228,8 @@ class Json(File):
 
     def __str__(self):
         return '%s\n%s' % (self.path,
-                           json.dumps(self, indent=4, separators=(',', ': '), ensure_ascii=False, sort_keys=True))
+                           json.dumps(self, indent=4, separators=(',', ': '),
+                                      ensure_ascii=False, sort_keys=True))
 
     @staticmethod
     def from_path(file_path):
