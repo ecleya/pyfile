@@ -7,7 +7,7 @@ import unicodedata
 from functools import partial
 
 
-__all__ = ['pyfile', 'File', 'Directory', 'Json']
+__all__ = ['pyfile', 'File', 'Directory', 'Json', 'Image']
 
 
 def pyfile(file_path):
@@ -163,12 +163,6 @@ class File:
     def remove(self):
         os.remove(self.path)
 
-    def files(self, include_hidden_files=False):
-        return []
-
-    def walk(self, include_hidden_files=False):
-        return []
-
 
 class Directory(File):
     def __init__(self, file_path):
@@ -258,3 +252,46 @@ class _List(Json, list):
     def __init__(self, file_path):
         File.__init__(self, file_path)
         list.__init__(self, json.load(open(self.path)) if self.is_exists() else [])
+
+
+class Image(File):
+    def __init__(self, file_path):
+        File.__init__(self, file_path)
+
+        self._image = None
+
+    def __getattr__(self, item):
+        if item == '_image':
+            raise AttributeError()
+
+        if self._image is None:
+            from PIL import Image as PILImage
+            self._image = PILImage.open(self.path)
+
+        try:
+            return getattr(self._image, item)
+        except AttributeError:
+            if item == 'resolution':
+                return self._image.size
+
+    @staticmethod
+    def from_path(file_path):
+        try:
+            from PIL import Image as PILImage
+            PILImage.open(file_path)
+        except Exception as e:
+            return None
+
+        return Image(file_path)
+
+    @property
+    def image(self):
+        return self._image
+
+    @property
+    def resolution(self):
+        return self._image.size
+
+    @staticmethod
+    def hint():
+        return ['.jpg', '.png', '.jpeg', '.bmp']
