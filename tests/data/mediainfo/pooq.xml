@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Mediainfo
+    version="0.1"
+    ref="무한도전 - S3E466.mp4">
+<File>
+<track type="General">
+<Count>322</Count>
+<Count_of_stream_of_this_kind>1</Count_of_stream_of_this_kind>
+<Kind_of_stream>General</Kind_of_stream>
+<Kind_of_stream>General</Kind_of_stream>
+<Stream_identifier>0</Stream_identifier>
+<Count_of_video_streams>1</Count_of_video_streams>
+<Count_of_audio_streams>1</Count_of_audio_streams>
+<Count_of_text_streams>1</Count_of_text_streams>
+<Video_Format_List>AVC</Video_Format_List>
+<Video_Format_WithHint_List>AVC</Video_Format_WithHint_List>
+<Codecs_Video>AVC</Codecs_Video>
+<Audio_Format_List>AAC</Audio_Format_List>
+<Audio_Format_WithHint_List>AAC</Audio_Format_WithHint_List>
+<Audio_codecs>AAC LC</Audio_codecs>
+<Text_Format_List>Timed Text</Text_Format_List>
+<Text_Format_WithHint_List>Timed Text</Text_Format_WithHint_List>
+<Text_codecs>Timed</Text_codecs>
+<Text_Language_List>Korean</Text_Language_List>
+<Complete_name>무한도전 - S3E466.mp4</Complete_name>
+<File_name>무한도전 - S3E466</File_name>
+<File_extension>mp4</File_extension>
+<Format>MPEG-4</Format>
+<Format>MPEG-4</Format>
+<Format_Extensions_usually_used>mp4 m4v m4a m4b m4p 3gpp 3gp 3gpp2 3g2 k3g jpm jpx mqv ismv isma f4v</Format_Extensions_usually_used>
+<Commercial_name>MPEG-4</Commercial_name>
+<Format_profile>Base Media</Format_profile>
+<Internet_media_type>video/mp4</Internet_media_type>
+<Codec_ID>isom</Codec_ID>
+<Codec_ID>isom (isom/iso2/avc1/mp41)</Codec_ID>
+<Codec_ID_Url>http://www.apple.com/quicktime/download/standalone.html</Codec_ID_Url>
+<CodecID_Compatible>isom/iso2/avc1/mp41</CodecID_Compatible>
+<Codec>MPEG-4</Codec>
+<Codec>MPEG-4</Codec>
+<Codec_Extensions_usually_used>mp4 m4v m4a m4b m4p 3gpp 3gp 3gpp2 3g2 k3g jpm jpx mqv ismv isma f4v</Codec_Extensions_usually_used>
+<File_size>3270214572</File_size>
+<File_size>3.05 GiB</File_size>
+<File_size>3 GiB</File_size>
+<File_size>3.0 GiB</File_size>
+<File_size>3.05 GiB</File_size>
+<File_size>3.046 GiB</File_size>
+<Duration>5022400</Duration>
+<Duration>1h 23mn</Duration>
+<Duration>1h 23mn 42s 400ms</Duration>
+<Duration>1h 23mn</Duration>
+<Duration>01:23:42.400</Duration>
+<Duration>01:23:42;11</Duration>
+<Duration>01:23:42.400 (01:23:42;11)</Duration>
+<Overall_bit_rate_mode>VBR</Overall_bit_rate_mode>
+<Overall_bit_rate_mode>Variable</Overall_bit_rate_mode>
+<Overall_bit_rate>5209007</Overall_bit_rate>
+<Overall_bit_rate>5 209 Kbps</Overall_bit_rate>
+<Frame_rate>29.970</Frame_rate>
+<Frame_rate>29.970 fps</Frame_rate>
+<Frame_count>150521</Frame_count>
+<Stream_size>136301103</Stream_size>
+<Stream_size>130 MiB (4%)</Stream_size>
+<Stream_size>130 MiB</Stream_size>
+<Stream_size>130 MiB</Stream_size>
+<Stream_size>130 MiB</Stream_size>
+<Stream_size>130.0 MiB</Stream_size>
+<Stream_size>130 MiB (4%)</Stream_size>
+<Proportion_of_this_stream>0.04168</Proportion_of_this_stream>
+<HeaderSize>1702363</HeaderSize>
+<DataSize>3239291767</DataSize>
+<FooterSize>29220442</FooterSize>
+<IsStreamable>Yes</IsStreamable>
+<Encoded_date>UTC 2016-02-06 18:23:53</Encoded_date>
+<Tagged_date>UTC 2016-02-06 18:23:53</Tagged_date>
+<File_last_modification_date>UTC 2016-02-06 12:03:17</File_last_modification_date>
+<File_last_modification_date__local_>2016-02-06 21:03:17</File_last_modification_date__local_>
+<Writing_application>Lavf56.19.100</Writing_application>
+<Writing_application>Lavf56.19.100</Writing_application>
+</track>
+
+<track type="Video">
+<Count>334</Count>
+<Count_of_stream_of_this_kind>1</Count_of_stream_of_this_kind>
+<Kind_of_stream>Video</Kind_of_stream>
+<Kind_of_stream>Video</Kind_of_stream>
+<Stream_identifier>0</Stream_identifier>
+<StreamOrder>0</StreamOrder>
+<ID>1</ID>
+<ID>1</ID>
+<Format>AVC</Format>
+<Format_Info>Advanced Video Codec</Format_Info>
+<Format_Url>http://developers.videolan.org/x264.html</Format_Url>
+<Commercial_name>AVC</Commercial_name>
+<Format_profile>High@L4</Format_profile>
+<Format_settings>CABAC / 3 Ref Frames</Format_settings>
+<Format_settings__CABAC>Yes</Format_settings__CABAC>
+<Format_settings__CABAC>Yes</Format_settings__CABAC>
+<Format_settings__ReFrames>3</Format_settings__ReFrames>
+<Format_settings__ReFrames>3 frames</Format_settings__ReFrames>
+<Format_settings__GOP>M=1, N=60</Format_settings__GOP>
+<Internet_media_type>video/H264</Internet_media_type>
+<Codec_ID>avc1</Codec_ID>
+<Codec_ID_Info>Advanced Video Coding</Codec_ID_Info>
+<Codec_ID_Url>http://www.apple.com/quicktime/download/standalone.html</Codec_ID_Url>
+<Codec>AVC</Codec>
+<Codec>AVC</Codec>
+<Codec_Family>AVC</Codec_Family>
+<Codec_Info>Advanced Video Codec</Codec_Info>
+<Codec_Url>http://developers.videolan.org/x264.html</Codec_Url>
+<Codec_CC>avc1</Codec_CC>
+<Codec_profile>High@L4</Codec_profile>
+<Codec_settings>CABAC / 3 Ref Frames</Codec_settings>
+<Codec_settings__CABAC>Yes</Codec_settings__CABAC>
+<Codec_Settings_RefFrames>3</Codec_Settings_RefFrames>
+<Duration>5022384</Duration>
+<Duration>1h 23mn</Duration>
+<Duration>1h 23mn 42s 384ms</Duration>
+<Duration>1h 23mn</Duration>
+<Duration>01:23:42.384</Duration>
+<Duration>01:23:42;11</Duration>
+<Duration>01:23:42.384 (01:23:42;11)</Duration>
+<Source_duration>5022351</Source_duration>
+<Source_duration>1h 23mn</Source_duration>
+<Source_duration>1h 23mn 42s 351ms</Source_duration>
+<Source_duration>1h 23mn</Source_duration>
+<Source_duration>01:23:42.351</Source_duration>
+<Bit_rate_mode>CBR</Bit_rate_mode>
+<Bit_rate_mode>Constant</Bit_rate_mode>
+<Bit_rate>4735792</Bit_rate>
+<Bit_rate>4 736 Kbps</Bit_rate>
+<Nominal_bit_rate>5000000</Nominal_bit_rate>
+<Nominal_bit_rate>5 000 Kbps</Nominal_bit_rate>
+<Width>1920</Width>
+<Width>1 920 pixels</Width>
+<Height>1080</Height>
+<Height>1 080 pixels</Height>
+<Stored_Height>1088</Stored_Height>
+<Sampled_Width>1920</Sampled_Width>
+<Sampled_Height>1080</Sampled_Height>
+<Pixel_aspect_ratio>1.000</Pixel_aspect_ratio>
+<Display_aspect_ratio>1.778</Display_aspect_ratio>
+<Display_aspect_ratio>16:9</Display_aspect_ratio>
+<Rotation>0.000</Rotation>
+<Frame_rate_mode>CFR</Frame_rate_mode>
+<Frame_rate_mode>Constant</Frame_rate_mode>
+<Frame_rate>29.970</Frame_rate>
+<Frame_rate>29.970 (30000/1001) fps</Frame_rate>
+<FrameRate_Num>30000</FrameRate_Num>
+<FrameRate_Den>1001</FrameRate_Den>
+<Frame_count>150521</Frame_count>
+<Source_frame_count>150520</Source_frame_count>
+<Resolution>8</Resolution>
+<Resolution>8 bits</Resolution>
+<Colorimetry>4:2:0</Colorimetry>
+<Color_space>YUV</Color_space>
+<Chroma_subsampling>4:2:0</Chroma_subsampling>
+<Bit_depth>8</Bit_depth>
+<Bit_depth>8 bits</Bit_depth>
+<Scan_type>Progressive</Scan_type>
+<Scan_type>Progressive</Scan_type>
+<Interlacement>PPF</Interlacement>
+<Interlacement>Progressive</Interlacement>
+<Bits__Pixel_Frame_>0.076</Bits__Pixel_Frame_>
+<Stream_size>2973123314</Stream_size>
+<Stream_size>2.77 GiB (91%)</Stream_size>
+<Stream_size>3 GiB</Stream_size>
+<Stream_size>2.8 GiB</Stream_size>
+<Stream_size>2.77 GiB</Stream_size>
+<Stream_size>2.769 GiB</Stream_size>
+<Stream_size>2.77 GiB (91%)</Stream_size>
+<Proportion_of_this_stream>0.90915</Proportion_of_this_stream>
+<Source_stream_size>3078501604</Source_stream_size>
+<Source_stream_size>2.87 GiB (94%)</Source_stream_size>
+<Source_stream_size>3 GiB</Source_stream_size>
+<Source_stream_size>2.9 GiB</Source_stream_size>
+<Source_stream_size>2.87 GiB</Source_stream_size>
+<Source_stream_size>2.867 GiB</Source_stream_size>
+<Source_stream_size>2.87 GiB (94%)</Source_stream_size>
+<Source_StreamSize_Proportion>0.94138</Source_StreamSize_Proportion>
+<Encoded_date>UTC 2016-02-06 18:23:53</Encoded_date>
+<Tagged_date>UTC 2016-02-06 10:52:19</Tagged_date>
+<Buffer_size>5000000</Buffer_size>
+<Source_Delay>33</Source_Delay>
+<Source_Delay_Source>Container</Source_Delay_Source>
+</track>
+
+<track type="Audio">
+<Count>272</Count>
+<Count_of_stream_of_this_kind>1</Count_of_stream_of_this_kind>
+<Kind_of_stream>Audio</Kind_of_stream>
+<Kind_of_stream>Audio</Kind_of_stream>
+<Stream_identifier>0</Stream_identifier>
+<StreamOrder>1</StreamOrder>
+<ID>2</ID>
+<ID>2</ID>
+<Format>AAC</Format>
+<Format_Info>Advanced Audio Codec</Format_Info>
+<Commercial_name>AAC</Commercial_name>
+<Format_profile>LC</Format_profile>
+<Codec_ID>40</Codec_ID>
+<Codec>AAC LC</Codec>
+<Codec>AAC LC</Codec>
+<Codec_Family>AAC</Codec_Family>
+<Codec_CC>40</Codec_CC>
+<Duration>5022400</Duration>
+<Duration>1h 23mn</Duration>
+<Duration>1h 23mn 42s 400ms</Duration>
+<Duration>1h 23mn</Duration>
+<Duration>01:23:42.400</Duration>
+<Duration>01:23:29:02</Duration>
+<Duration>01:23:42.400 (01:23:29:02)</Duration>
+<Bit_rate_mode>CBR</Bit_rate_mode>
+<Bit_rate_mode>Constant</Bit_rate_mode>
+<Bit_rate>256000</Bit_rate>
+<Bit_rate>256 Kbps</Bit_rate>
+<Channel_s_>2</Channel_s_>
+<Channel_s_>2 channels</Channel_s_>
+<Channel_positions>Front: L R</Channel_positions>
+<Channel_positions>2/0/0</Channel_positions>
+<ChannelLayout>L R</ChannelLayout>
+<Samples_per_frame>1024</Samples_per_frame>
+<Sampling_rate>48000</Sampling_rate>
+<Sampling_rate>48.0 KHz</Sampling_rate>
+<Samples_count>241075200</Samples_count>
+<Frame_rate>46.875</Frame_rate>
+<Frame_rate>46.875 fps (1024 spf)</Frame_rate>
+<Frame_count>235425</Frame_count>
+<Compression_mode>Lossy</Compression_mode>
+<Compression_mode>Lossy</Compression_mode>
+<Stream_size>160716800</Stream_size>
+<Stream_size>153 MiB (5%)</Stream_size>
+<Stream_size>153 MiB</Stream_size>
+<Stream_size>153 MiB</Stream_size>
+<Stream_size>153 MiB</Stream_size>
+<Stream_size>153.3 MiB</Stream_size>
+<Stream_size>153 MiB (5%)</Stream_size>
+<Proportion_of_this_stream>0.04915</Proportion_of_this_stream>
+<Default>Yes</Default>
+<Default>Yes</Default>
+<Alternate_group>1</Alternate_group>
+<Alternate_group>1</Alternate_group>
+<Encoded_date>UTC 2016-02-06 18:23:53</Encoded_date>
+<Tagged_date>UTC 2016-02-06 10:52:19</Tagged_date>
+</track>
+
+<track type="Text">
+<Count>234</Count>
+<Count_of_stream_of_this_kind>1</Count_of_stream_of_this_kind>
+<Kind_of_stream>Text</Kind_of_stream>
+<Kind_of_stream>Text</Kind_of_stream>
+<Stream_identifier>0</Stream_identifier>
+<StreamOrder>2</StreamOrder>
+<ID>3</ID>
+<ID>3</ID>
+<Format>Timed Text</Format>
+<Commercial_name>Timed Text</Commercial_name>
+<Muxing_mode>sbtl</Muxing_mode>
+<Codec_ID>tx3g</Codec_ID>
+<Codec_ID_Url>http://www.apple.com/quicktime/download/standalone.html</Codec_ID_Url>
+<Codec>tx3g</Codec>
+<Codec>Timed</Codec>
+<Codec_Info>Timed text (3GPP)</Codec_Info>
+<Codec_Url>http://www.apple.com/quicktime/download/standalone.html</Codec_Url>
+<Duration>4938814</Duration>
+<Duration>1h 22mn</Duration>
+<Duration>1h 22mn 18s 814ms</Duration>
+<Duration>1h 22mn</Duration>
+<Duration>01:22:18.814</Duration>
+<Duration>01:22:18.814</Duration>
+<Bit_rate_mode>VBR</Bit_rate_mode>
+<Bit_rate_mode>Variable</Bit_rate_mode>
+<Bit_rate>119</Bit_rate>
+<Bit_rate>119 bps</Bit_rate>
+<Frame_rate>0.435</Frame_rate>
+<Frame_rate>0.435 fps</Frame_rate>
+<Frame_count>2146</Frame_count>
+<Stream_size>73355</Stream_size>
+<Stream_size>71.6 KiB (0%)</Stream_size>
+<Stream_size>72 KiB</Stream_size>
+<Stream_size>72 KiB</Stream_size>
+<Stream_size>71.6 KiB</Stream_size>
+<Stream_size>71.64 KiB</Stream_size>
+<Stream_size>71.6 KiB (0%)</Stream_size>
+<Proportion_of_this_stream>0.00002</Proportion_of_this_stream>
+<Title>subtitle</Title>
+<Language>ko</Language>
+<Language>Korean</Language>
+<Language>Korean</Language>
+<Language>ko</Language>
+<Language>kor</Language>
+<Language>ko</Language>
+<Forced>No</Forced>
+<Forced>No</Forced>
+<Encoded_date>UTC 2016-02-06 10:52:19</Encoded_date>
+<Tagged_date>UTC 2016-02-06 10:52:19</Tagged_date>
+</track>
+
+</File>
+</Mediainfo>
+

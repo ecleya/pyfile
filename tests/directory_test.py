@@ -11,4 +11,4 @@ class TestDirectory(unittest.TestCase):
 
     def test_files(self):
         file = pyfile(DATA_ROOT)
-        self.assertEqual(len(file.files()), 3)
+        self.assertEqual(len(file.files()), 5)
