@@ -9,6 +9,10 @@ class TestDirectory(unittest.TestCase):
         directory = pyfile(DATA_ROOT)
         self.assertTrue(isinstance(directory, Directory))
 
+    def test_is_directory(self):
+        directory = pyfile(DATA_ROOT)
+        self.assertTrue(directory.is_directory())
+
     def test_files(self):
         file = pyfile(DATA_ROOT)
         self.assertEqual(len(file.files()), 5)

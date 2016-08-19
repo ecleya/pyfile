@@ -16,6 +16,13 @@ class TestJson(unittest.TestCase):
         self.assertTrue(isinstance(file, list))
         self.assertTrue(isinstance(file, Json))
 
+    def test_is_json(self):
+        file = pyfile(os.path.join(DATA_ROOT, 'list.json'))
+        self.assertTrue(file.is_json())
+
+        file = pyfile(os.path.join(DATA_ROOT, 'dict.json'))
+        self.assertTrue(file.is_json())
+
     def test_dict_json_access(self):
         file = pyfile(os.path.join(DATA_ROOT, 'dict.json'))
         self.assertEqual(file['a'], 1)

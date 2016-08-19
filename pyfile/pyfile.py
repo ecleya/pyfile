@@ -58,6 +58,13 @@ class File:
     def __str__(self):
         return self._path
 
+    def __getattr__(self, item):
+        for class_ in File.__subclasses__():
+            if item == 'is_{}'.format(class_.__name__.lower()):
+                return lambda: isinstance(self, class_)
+
+        raise AttributeError()
+
     @staticmethod
     def replace_unusable_char(file_name):
         invalid_chars = '\\/:*?<>|"'
@@ -143,9 +150,6 @@ class File:
     def is_exists(self):
         return os.path.exists(self.path)
 
-    def is_dir(self):
-        return False
-
     def move_to(self, destination):
         body, _ = os.path.split(destination)
         if not os.path.exists(body):
@@ -197,7 +201,7 @@ class Directory(File):
                 continue
 
             result.append(file)
-            if file.is_dir():
+            if file.is_directory():
                 result.extend(file.walk())
 
         result.sort()
@@ -215,9 +219,6 @@ class Directory(File):
 
     def remove(self):
         shutil.rmtree(self.path)
-
-    def is_dir(self):
-        return True
 
 
 class Json(File):
@@ -265,9 +266,6 @@ class Image(File):
         self._image = None
 
     def __getattr__(self, item):
-        if item == '_image':
-            raise AttributeError()
-
         if self._image is None:
             from PIL import Image as PILImage
             self._image = PILImage.open(self.path)
@@ -277,6 +275,8 @@ class Image(File):
         except AttributeError:
             if item == 'resolution':
                 return self._image.size
+
+            return File.__getattr__(self, item)
 
     @staticmethod
     def from_path(file_path):
