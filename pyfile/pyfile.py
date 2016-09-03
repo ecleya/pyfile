@@ -53,7 +53,33 @@ class File:
         return self._path.__hash__()
 
     def __eq__(self, other):
-        return self.path == other.path
+        if type(other) is not str and not isinstance(other, File):
+            return False
+
+        if type(other) is str:
+            other = pyfile(other)
+
+        if self.path == other.path:
+            return True
+
+        if self.size != other.size:
+            return False
+
+        block_size = 4096
+        lhs = open(self.path, 'rb')
+        rhs = open(other.path, 'rb')
+
+        while True:
+            lhs_block = lhs.read(block_size)
+            rhs_block = rhs.read(block_size)
+
+            if lhs_block != rhs_block:
+                return False
+
+            if lhs_block == b'':
+                break
+
+        return True
 
     def __str__(self):
         return self._path
@@ -115,35 +141,6 @@ class File:
     def relpath(self, start):
         return os.path.relpath(self.path, start)
 
-    def is_equal(self, other):
-        if type(other) is not str and not isinstance(other, File):
-            return False
-
-        if type(other) is str:
-            other = pyfile(other)
-
-        if self.path == other.path:
-            return True
-
-        if self.size != other.size:
-            return False
-
-        block_size = 4096
-        lhs = open(self.path, 'rb')
-        rhs = open(other.path, 'rb')
-
-        while True:
-            lhs_block = lhs.read(block_size)
-            rhs_block = rhs.read(block_size)
-
-            if lhs_block != rhs_block:
-                return False
-
-            if lhs_block == b'':
-                break
-
-        return True
-
     def is_hidden(self):
         return self._name[0] in ['.', '$', '@']
 
@@ -187,26 +184,22 @@ class Directory(File):
         if not self.is_exists():
             return []
 
-        result = [pyfile(os.path.join(self.path, filename)) for filename in os.listdir(self._path)]
-        result.sort()
-        if include_hidden_files:
-            return result
+        files = [File(os.path.join(self.path, filename)) for filename in os.listdir(self._path)]
+        files.sort()
+        for file in files:
+            if file.is_hidden() and not include_hidden_files:
+                continue
 
-        return [file for file in result if not file.is_hidden()]
+            yield pyfile(file.path)
 
     def walk(self, include_hidden_files=False):
-        result = []
         for file in self.files(include_hidden_files):
             if file.is_hidden() and not include_hidden_files:
                 continue
 
-            result.append(file)
+            yield file
             if file.is_directory():
-                result.extend(file.walk())
-
-        result.sort()
-
-        return result
+                yield from file.files(include_hidden_files)
 
     def copy_to(self, destination):
         body, _ = os.path.split(destination)
@@ -539,6 +532,10 @@ class _VideoTrack(_Track):
             return float(self._element.find('Original_frame_rate').text)
 
         return float(self._element.find('Frame_rate').text)
+    
+    @property
+    def frame_count(self):
+        return int(self._element.find('Frame_count').text)
 
 
 class _AudioTrack(_Track):

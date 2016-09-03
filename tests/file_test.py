@@ -15,3 +15,24 @@ class TestFile(unittest.TestCase):
 
     def test_not_exists_file(self):
         self.assertRaises(FileNotFoundError, pyfile, os.path.join(DATA_ROOT, 'not exists.txt'))
+
+    def test_equality_same_path(self):
+        file1 = pyfile(os.path.join(DATA_ROOT, 'text_files', 'original.txt'))
+        file2 = pyfile(os.path.join(DATA_ROOT, 'text_files', 'original.txt'))
+
+        self.assertTrue(file1 == file2)
+        self.assertTrue(file1 == os.path.join(DATA_ROOT, 'text_files', 'original.txt'))
+
+    def test_equality_same_file(self):
+        file1 = pyfile(os.path.join(DATA_ROOT, 'text_files', 'original.txt'))
+        file2 = pyfile(os.path.join(DATA_ROOT, 'text_files', 'same.txt'))
+
+        self.assertTrue(file1 == file2)
+        self.assertTrue(file1 == os.path.join(DATA_ROOT, 'text_files', 'same.txt'))
+
+    def test_equality_different_file(self):
+        file1 = pyfile(os.path.join(DATA_ROOT, 'text_files', 'original.txt'))
+        file2 = pyfile(os.path.join(DATA_ROOT, 'text_files', 'diff.txt'))
+
+        self.assertTrue(file1 != file2)
+        self.assertTrue(file1 != os.path.join(DATA_ROOT, 'text_files', 'diff_size.txt'))
