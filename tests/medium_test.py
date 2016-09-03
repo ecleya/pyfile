@@ -11,6 +11,10 @@ class TestMedium(unittest.TestCase):
         medium = pyfile(os.path.join(DATA_ROOT, 'empty.mp4'))
         self.assertTrue(isinstance(medium, Medium))
 
+    def test_is_medium(self):
+        medium = pyfile(os.path.join(DATA_ROOT, 'empty.mp4'))
+        self.assertTrue(medium.is_medium())
+
     @mock.patch('os.path.exists')
     @mock.patch('subprocess.Popen')
     def test_run_script(self, mock_popen, mock_exists):
