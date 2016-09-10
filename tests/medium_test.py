@@ -60,7 +60,7 @@ class TestMedium(unittest.TestCase):
         self._set_mediainfo_as_pooq(mock_popen, mock_exists)
 
         medium = pyfile('pooq.mp4')
-        self.assertEqual(len(medium.chapters), 0)
+        self.assertEqual(len(medium.chapters), 1)
 
     @mock.patch('os.path.exists')
     @mock.patch('subprocess.Popen')
