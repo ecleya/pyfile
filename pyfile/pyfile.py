@@ -199,7 +199,11 @@ class Directory(File):
 
             yield file
             if file.is_directory():
-                yield from file.files(include_hidden_files)
+                yield from file.walk(include_hidden_files)
+
+    @property
+    def size(self):
+        return sum([file.size for file in self.files(True)])
 
     def copy_to(self, destination):
         body, _ = os.path.split(destination)
