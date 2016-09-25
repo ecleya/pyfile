@@ -23,6 +23,5 @@ class TestDirectory(unittest.TestCase):
         self.assertEqual(len(list(file.walk())), 12)
 
     def test_size(self):
-        file = pyfile(os.path.join(DATA_ROOT, 'mediainfo'))
-        self.assertEqual(file.size, 0)
-        print(file.size)
+        file = pyfile(os.path.join(DATA_ROOT))
+        self.assertEqual(file.size, 128007)

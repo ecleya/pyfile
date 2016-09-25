@@ -56,15 +56,15 @@ class TestMedium(unittest.TestCase):
 
     @mock.patch('os.path.exists')
     @mock.patch('subprocess.Popen')
-    def test_no_chapter(self, mock_popen, mock_exists):
+    def test_no_chapter_pooq(self, mock_popen, mock_exists):
         self._set_mediainfo_as_pooq(mock_popen, mock_exists)
 
         medium = pyfile('pooq.mp4')
-        self.assertEqual(len(medium.chapters), 0)
+        self.assertEqual(len(medium.chapters), 1)
 
     @mock.patch('os.path.exists')
     @mock.patch('subprocess.Popen')
-    def test_no_chapter(self, mock_popen, mock_exists):
+    def test_no_chapter_starwars(self, mock_popen, mock_exists):
         self._set_mediainfo_as_starwars_ep3(mock_popen, mock_exists)
 
         medium = pyfile('starwars-ep3.mp4')

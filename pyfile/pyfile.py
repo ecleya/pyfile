@@ -199,7 +199,11 @@ class Directory(File):
 
             yield file
             if file.is_directory():
-                yield from file.files(include_hidden_files)
+                yield from file.walk(include_hidden_files)
+
+    @property
+    def size(self):
+        return sum([file.size for file in self.files(True)])
 
     def copy_to(self, destination):
         body, _ = os.path.split(destination)
@@ -335,10 +339,6 @@ class Medium(File):
         return self.xml_root.find('File').find('track').find('Album').text
 
     @property
-    def album(self):
-        return self.xml_root.find('File').find('track').find('Album').text
-
-    @property
     def album_performer(self):
         if self.xml_root.find('File').find('track').find('Album_Performer') is None:
             return None
@@ -365,7 +365,8 @@ class Medium(File):
     def video_tracks(self):
         if self._video_tracks is None:
             tracks = [track for track in self.xml_root.find('File').findall('track')]
-            self._video_tracks = [_VideoTrack(element) for element in tracks if element.attrib['type'] == 'Video']
+            self._video_tracks = [_VideoTrack(element) for element in tracks
+                                  if element.attrib['type'] == 'Video']
 
         return self._video_tracks
 
@@ -373,7 +374,8 @@ class Medium(File):
     def audio_tracks(self):
         if self._audio_tracks is None:
             tracks = [track for track in self.xml_root.find('File').findall('track')]
-            self._audio_tracks = [_AudioTrack(element) for element in tracks if element.attrib['type'] == 'Audio']
+            self._audio_tracks = [_AudioTrack(element) for element in tracks
+                                  if element.attrib['type'] == 'Audio']
 
         return self._audio_tracks
 
@@ -381,13 +383,16 @@ class Medium(File):
     def subtitle_tracks(self):
         if self._subtitle_tracks is None:
             tracks = [track for track in self.xml_root.find('File').findall('track')]
-            self._subtitle_tracks = [_SubtitleTrack(element) for element in tracks if element.attrib['type'] == 'Text']
+            self._subtitle_tracks = [_SubtitleTrack(element) for element in tracks
+                                     if element.attrib['type'] == 'Text']
 
         return self._subtitle_tracks
 
     @property
     def chapters(self):
-        tracks = [track for track in self.xml_root.find('File').findall('track') if track.attrib['type'] == 'Menu']
+        tracks = [track for track in self.xml_root.find('File').findall('track')
+                  if track.attrib['type'] == 'Menu']
+
         if len(tracks) == 0:
             return [{'Number': 1, 'Start': 0, 'Duration': self.duration}]
 
@@ -532,7 +537,7 @@ class _VideoTrack(_Track):
             return float(self._element.find('Original_frame_rate').text)
 
         return float(self._element.find('Frame_rate').text)
-    
+
     @property
     def frame_count(self):
         return int(self._element.find('Frame_count').text)
