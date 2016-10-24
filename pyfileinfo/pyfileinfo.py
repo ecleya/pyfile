@@ -11,18 +11,16 @@ from fractions import Fraction
 from xml.etree import ElementTree
 
 
-__all__ = ['pyfile', 'File', 'Directory', 'Json', 'Image', 'Medium']
+__all__ = ['load', 'File', 'Directory', 'Json', 'Image', 'Medium']
 
 
-def pyfile(file_path):
+def load(file_path):
     if not os.path.exists(file_path):
         raise FileNotFoundError()
 
     ext = os.path.splitext(file_path)[1].lower()
-    classes = [class_ for class_ in File.__subclasses__() if ext in class_.hint()] + \
-              [class_ for class_ in File.__subclasses__() if ext not in class_.hint()]
-    classes.remove(Directory)
-    classes.append(Directory)
+    classes = [class_ for class_ in _subclasses() if ext in class_.hint()] + \
+              [class_ for class_ in _subclasses() if ext not in class_.hint()]
 
     for class_ in classes:
         inst = class_.from_path(file_path)
@@ -30,6 +28,18 @@ def pyfile(file_path):
             return inst
 
     return File(file_path)
+
+
+def _subclasses():
+    return _custom_subclasses() + _default_subclasses()
+
+
+def _custom_subclasses():
+    return [class_ for class_ in File.__subclasses__() if class_ not in _default_subclasses()]
+
+
+def _default_subclasses():
+    return [Json, Image, Medium, Directory]
 
 
 class File:
@@ -57,7 +67,7 @@ class File:
             return False
 
         if type(other) is str:
-            other = pyfile(other)
+            other = load(other)
 
         if self.path == other.path:
             return True
@@ -108,7 +118,7 @@ class File:
 
     @property
     def body(self):
-        return pyfile(os.path.split(self._path)[0])
+        return load(os.path.split(self._path)[0])
 
     @property
     def path(self):
@@ -163,7 +173,7 @@ class File:
 
         print('type:info\tcommand:file copy\tsrc:%s\tdst:%s' % (self.path, destination))
         shutil.copy(self._path, destination)
-        return pyfile(destination)
+        return load(destination)
 
     def remove(self):
         os.remove(self.path)
@@ -190,7 +200,7 @@ class Directory(File):
             if file.is_hidden() and not include_hidden_files:
                 continue
 
-            yield pyfile(file.path)
+            yield load(file.path)
 
     def walk(self, include_hidden_files=False):
         for file in self.files(include_hidden_files):
@@ -212,7 +222,7 @@ class Directory(File):
 
         print('type:info\tcommand:copy\tsrc:%s\tdst:%s' % (self.path, destination))
         shutil.copytree(self._path, destination)
-        return pyfile(destination)
+        return load(destination)
 
     def remove(self):
         shutil.rmtree(self.path)
