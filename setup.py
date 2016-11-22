@@ -13,6 +13,7 @@ def version():
         warnings.warn("Couldn't found .version file", RuntimeWarning)
         return ''
 
+
 requirements = [
 ]
 
