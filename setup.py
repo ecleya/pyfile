@@ -17,13 +17,13 @@ requirements = [
 ]
 
 setup(
-    name='pyfile',
+    name='pyfileinfo',
     version=version(),
     author='Kiheon Choi',
     author_email='ecleya' '@' 'smartstudy.co.kr',
     maintainer='DevOps Team, SMARTSTUDY',
     maintainer_email='d9@smartstudy.co.kr',
-    url='https://github.com/smartstudy/pyfile/',
+    url='https://github.com/smartstudy/pyfileinfo/',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
