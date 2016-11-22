@@ -42,6 +42,16 @@ def _default_subclasses():
     return [Json, Image, Medium, Directory]
 
 
+def _which(name):
+    folders = os.environ.get('PATH', os.defpath).split(':')
+    for folder in folders:
+        file_path = os.path.join(folder, name)
+        if os.path.exists(file_path) and os.access(file_path, os.X_OK):
+            return file_path
+
+    return None
+
+
 class File:
     def __init__(self, file_path):
         self._path = unicodedata.normalize('NFC', file_path)
@@ -318,7 +328,8 @@ class Medium(File):
         self._duration = None
         self._mean_volume = None
 
-        cmd = ['/usr/local/bin/mediainfo', '--Output=XML', '-f', self.path]
+        mediainfo_path = _which('mediainfo')
+        cmd = [mediainfo_path, '--Output=XML', '-f', self.path]
         out, _ = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         self._xml_root = ElementTree.fromstring(out.decode('utf8', errors='ignore'))
 
