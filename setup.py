@@ -15,6 +15,8 @@ def version():
 
 
 requirements = [
+    'pillow',
+    'pycountry',
 ]
 
 setup(
