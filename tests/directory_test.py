@@ -1,27 +1,31 @@
 import os
 import unittest
 
-from pyfileinfo import load, Directory
+from pyfileinfo import PyFileInfo, Directory
 from tests import DATA_ROOT
 
 
 class TestDirectory(unittest.TestCase):
     def test_directory(self):
-        directory = load(DATA_ROOT)
-        self.assertTrue(isinstance(directory, Directory))
+        directory = PyFileInfo(DATA_ROOT)
+        self.assertTrue(isinstance(directory.instance, Directory))
 
     def test_is_directory(self):
-        directory = load(DATA_ROOT)
+        directory = PyFileInfo(DATA_ROOT)
         self.assertTrue(directory.is_directory())
 
-    def test_files(self):
-        file = load(DATA_ROOT)
-        self.assertEqual(len(list(file.files())), 6)
+    def test_files_in(self):
+        file = PyFileInfo(DATA_ROOT)
+        self.assertEqual(len(list(file.files_in())), 6)
 
-    def test_walk(self):
-        file = load(DATA_ROOT)
-        self.assertEqual(len(list(file.walk())), 12)
+    def test_recursive_files_in(self):
+        file = PyFileInfo(DATA_ROOT)
+        self.assertEqual(len(list(file.files_in(recursive=True))), 12)
+
+    def test_hidden_file(self):
+        file = PyFileInfo(DATA_ROOT)
+        self.assertEqual(len(list(file.files_in(include_hidden_file=True))), 7)
 
     def test_size(self):
-        file = load(os.path.join(DATA_ROOT))
+        file = PyFileInfo(os.path.join(DATA_ROOT))
         self.assertEqual(file.size, 128007)
