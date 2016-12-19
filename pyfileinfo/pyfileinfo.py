@@ -1,7 +1,7 @@
 import os
 import re
 import json
-import shutil
+import filecmp
 import hashlib
 import pycountry
 import subprocess
@@ -9,53 +9,19 @@ import unicodedata
 from functools import partial
 from fractions import Fraction
 from xml.etree import ElementTree
+from PIL import Image as PILImage
+from collections.abc import Sequence
 
 
-__all__ = ['load', 'File', 'Directory', 'Json', 'Image', 'Medium']
+__all__ = ['PyFileInfo', 'File', 'Directory', 'Json', 'Image', 'Medium']
 
 
-def load(file_path):
-    if not os.path.exists(file_path):
-        raise FileNotFoundError()
+class PyFileInfo(Sequence):
+    def __init__(self, path):
+        Sequence.__init__(self)
 
-    ext = os.path.splitext(file_path)[1].lower()
-    classes = [class_ for class_ in _subclasses() if ext in class_.hint()] + \
-              [class_ for class_ in _subclasses() if ext not in class_.hint()]
-
-    for class_ in classes:
-        inst = class_.from_path(file_path)
-        if inst is not None:
-            return inst
-
-    return File(file_path)
-
-
-def _subclasses():
-    return _custom_subclasses() + _default_subclasses()
-
-
-def _custom_subclasses():
-    return [class_ for class_ in File.__subclasses__() if class_ not in _default_subclasses()]
-
-
-def _default_subclasses():
-    return [Json, Image, Medium, Directory]
-
-
-def _which(name):
-    folders = os.environ.get('PATH', os.defpath).split(':')
-    for folder in folders:
-        file_path = os.path.join(folder, name)
-        if os.path.exists(file_path) and os.access(file_path, os.X_OK):
-            return file_path
-
-    return None
-
-
-class File:
-    def __init__(self, file_path):
-        self._path = unicodedata.normalize('NFC', file_path)
-        _, self._name = os.path.split(self._path)
+        self._path = unicodedata.normalize('NFC', path)
+        self._instance = None
 
     def __lt__(self, other):
         def split_by_number(file_path):
@@ -73,33 +39,13 @@ class File:
         return self._path.__hash__()
 
     def __eq__(self, other):
-        if type(other) is not str and not isinstance(other, File):
-            return False
-
         if type(other) is str:
-            other = load(other)
+            return filecmp.cmp(self.path, other, False)
 
-        if self.path == other.path:
-            return True
+        if isinstance(other, PyFileInfo):
+            return filecmp.cmp(self.path, other.path, False)
 
-        if self.size != other.size:
-            return False
-
-        block_size = 4096
-        lhs = open(self.path, 'rb')
-        rhs = open(other.path, 'rb')
-
-        while True:
-            lhs_block = lhs.read(block_size)
-            rhs_block = rhs.read(block_size)
-
-            if lhs_block != rhs_block:
-                return False
-
-            if lhs_block == b'':
-                break
-
-        return True
+        return False
 
     def __str__(self):
         return self._path
@@ -107,48 +53,63 @@ class File:
     def __getattr__(self, item):
         for class_ in File.__subclasses__():
             if item == 'is_{}'.format(class_.__name__.lower()):
-                return lambda: isinstance(self, class_)
+                if self._instance is None:
+                    return lambda: class_.is_valid(self.path)
 
-        raise AttributeError()
+                return lambda: isinstance(self.instance, class_)
 
-    @staticmethod
-    def replace_unusable_char(file_name):
-        invalid_chars = '\\/:*?<>|"'
-        for invalid_char in invalid_chars:
-            file_name = file_name.replace(invalid_char, '_')
+        return getattr(self.instance, item)
 
-        if file_name[0] == '.':
-            file_name = '_' + file_name[1:]
+    def __getitem__(self, item):
+        return self.instance[item]
 
-        return file_name
+    def __len__(self):
+        return len(self.instance)
 
-    @staticmethod
-    def hint():
-        return []
+    def is_hidden(self):
+        return self.name[0] in ['.', '$', '@']
+
+    def is_exists(self):
+        return os.path.exists(self.path)
 
     @property
-    def body(self):
-        return load(os.path.split(self._path)[0])
+    def instance(self):
+        if self._instance is None:
+            classes = [class_ for class_ in _subclasses() if self.extension in class_.hint()] + \
+                      [class_ for class_ in _subclasses() if self.extension not in class_.hint()]
+
+            self._instance = File(self.path)
+            for class_ in classes:
+                if not class_.is_valid(self.path):
+                    continue
+
+                self._instance = class_(self.path)
+                break
+
+        return self._instance
 
     @property
     def path(self):
         return self._path
 
     @property
-    def name(self):
-        return self._name
-
-    @property
-    def size(self):
-        return os.path.getsize(self.path)
-
-    @property
     def extension(self):
-        return os.path.splitext(self._path)[1].lower()
+        return os.path.splitext(self.path)[1]
+
+    @property
+    def name(self):
+        return os.path.split(self.path)[1]
+
+    @property
+    def body(self):
+        return PyFileInfo(os.path.split(self.path)[0])
 
     @property
     def md5(self):
         return self._calculate_hash(hashlib.md5)
+
+    def relpath(self, start):
+        return os.path.relpath(self.path, start)
 
     def _calculate_hash(self, hash_algorithm):
         with open(self.path, mode='rb') as f:
@@ -158,35 +119,29 @@ class File:
 
         return digest.digest()
 
-    def relpath(self, start):
-        return os.path.relpath(self.path, start)
 
-    def is_hidden(self):
-        return self._name[0] in ['.', '$', '@']
+class File:
+    def __init__(self, path):
+        self._path = path
 
-    def is_exists(self):
-        return os.path.exists(self.path)
+    def __str__(self):
+        return self._path
 
-    def move_to(self, destination):
-        body, _ = os.path.split(destination)
-        if not os.path.exists(body):
-            os.makedirs(body)
+    @staticmethod
+    def is_valid(path):
+        return True
 
-        print('type:info\tcommand:file move\tsrc:%s\tdst:%s' % (self.path, destination))
-        shutil.move(self._path, destination)
-        self._path = destination
+    @staticmethod
+    def hint():
+        return []
 
-    def copy_to(self, destination):
-        body, _ = os.path.split(destination)
-        if not os.path.exists(body):
-            os.makedirs(body)
+    @property
+    def path(self):
+        return self._path
 
-        print('type:info\tcommand:file copy\tsrc:%s\tdst:%s' % (self.path, destination))
-        shutil.copy(self._path, destination)
-        return load(destination)
-
-    def remove(self):
-        os.remove(self.path)
+    @property
+    def size(self):
+        return os.path.getsize(self.path)
 
 
 class Directory(File):
@@ -194,86 +149,61 @@ class Directory(File):
         File.__init__(self, file_path)
 
     @staticmethod
-    def from_path(file_path):
-        if os.path.isdir(file_path):
-            return Directory(file_path)
+    def is_valid(path):
+        return os.path.isdir(path)
 
-        return None
-
-    def files(self, include_hidden_files=False):
-        if not self.is_exists():
-            return []
-
-        files = [File(os.path.join(self.path, filename)) for filename in os.listdir(self._path)]
+    def files_in(self, include_hidden_file=False, recursive=False):
+        files = [PyFileInfo(os.path.join(self.path, filename))
+                 for filename in os.listdir(self.path)]
         files.sort()
+
         for file in files:
-            if file.is_hidden() and not include_hidden_files:
-                continue
-
-            yield load(file.path)
-
-    def walk(self, include_hidden_files=False):
-        for file in self.files(include_hidden_files):
-            if file.is_hidden() and not include_hidden_files:
+            if file.is_hidden() and not include_hidden_file:
                 continue
 
             yield file
-            if file.is_directory():
-                yield from file.walk(include_hidden_files)
+            if recursive and file.is_directory():
+                yield from file.files_in(include_hidden_file=include_hidden_file,
+                                         recursive=recursive)
 
     @property
     def size(self):
-        return sum([file.size for file in self.files(True)])
-
-    def copy_to(self, destination):
-        body, _ = os.path.split(destination)
-        if not os.path.exists(body):
-            os.makedirs(body)
-
-        print('type:info\tcommand:copy\tsrc:%s\tdst:%s' % (self.path, destination))
-        shutil.copytree(self._path, destination)
-        return load(destination)
-
-    def remove(self):
-        shutil.rmtree(self.path)
+        return sum([file.size for file in self.files_in(include_hidden_file=True)])
 
 
-class Json(File):
+class Json(File, Sequence):
     def __init__(self, file_path):
         File.__init__(self, file_path)
+        Sequence.__init__(self)
+
+        self._instance = None
 
     def __str__(self):
         return '%s\n%s' % (self.path,
-                           json.dumps(self, indent=4, separators=(',', ': '),
+                           json.dumps(self.instance, indent=4, separators=(',', ': '),
                                       ensure_ascii=False, sort_keys=True))
 
+    def __getitem__(self, item):
+        return self.instance[item]
+
+    def __len__(self):
+        return len(self.instance)
+
     @staticmethod
-    def from_path(file_path):
+    def is_valid(path):
         try:
-            json_value = json.load(open(file_path))
+            json.load(open(path))
         except Exception as e:
-            return None
+            return False
 
-        if type(json_value) is dict:
-            return _Dict(file_path)
+        return True
 
-        return _List(file_path)
+    @property
+    def instance(self):
+        if self._instance is None:
+            self._instance = json.load(open(self.path))
 
-    def dump(self):
-        json.dump(self, open(self.path, 'w', encoding='utf8'),
-                  indent=4, separators=(',', ': '), ensure_ascii=False, sort_keys=True)
-
-
-class _Dict(Json, dict):
-    def __init__(self, file_path):
-        Json.__init__(self, file_path)
-        dict.__init__(self, json.load(open(self.path)) if self.is_exists() else {})
-
-
-class _List(Json, list):
-    def __init__(self, file_path):
-        File.__init__(self, file_path)
-        list.__init__(self, json.load(open(self.path)) if self.is_exists() else [])
+        return self._instance
 
 
 class Image(File):
@@ -283,30 +213,29 @@ class Image(File):
         self._image = None
 
     def __getattr__(self, item):
-        if self._image is None:
-            from PIL import Image as PILImage
-            self._image = PILImage.open(self.path)
-
         try:
-            return getattr(self._image, item)
+            return getattr(self.image, item)
         except AttributeError:
             if item == 'resolution':
-                return self._image.size
+                return self.image.size
 
             return File.__getattr__(self, item)
 
     @staticmethod
-    def from_path(file_path):
+    def is_valid(path):
         try:
             from PIL import Image as PILImage
-            PILImage.open(file_path)
+            PILImage.open(path)
         except Exception as e:
-            return None
+            return False
 
-        return Image(file_path)
+        return True
 
     @property
     def image(self):
+        if self._image is None:
+            self._image = PILImage.open(self.path)
+
         return self._image
 
     @property
@@ -346,6 +275,18 @@ class Medium(File):
             return None
         except:
             return None
+
+    @staticmethod
+    def is_valid(path):
+        if os.path.isdir(path):
+            return False
+
+        try:
+            medium = Medium(path)
+        except:
+            return False
+
+        return len(medium.video_tracks) > 0 or len(medium.audio_tracks) > 0
 
     @property
     def xml_root(self):
@@ -585,3 +526,25 @@ class _SubtitleTrack(_Track):
     @property
     def format(self):
         return self._element.find('Format').text
+
+
+def _subclasses():
+    return _custom_subclasses() + _default_subclasses()
+
+
+def _custom_subclasses():
+    return [class_ for class_ in File.__subclasses__() if class_ not in _default_subclasses()]
+
+
+def _default_subclasses():
+    return [Json, Image, Medium, Directory]
+
+
+def _which(name):
+    folders = os.environ.get('PATH', os.defpath).split(':')
+    for folder in folders:
+        file_path = os.path.join(folder, name)
+        if os.path.exists(file_path) and os.access(file_path, os.X_OK):
+            return file_path
+
+    return None
