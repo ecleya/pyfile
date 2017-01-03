@@ -1,18 +1,18 @@
 import os
 import unittest
 
-from pyfileinfo import PyFileInfo, Json
+from pyfileinfo import PyFileInfo, JSON
 from tests import DATA_ROOT
 
 
-class TestJson(unittest.TestCase):
+class TestJSON(unittest.TestCase):
     def test_dict_json_file(self):
         file = PyFileInfo(os.path.join(DATA_ROOT, 'dict.json'))
-        self.assertTrue(isinstance(file.instance, Json))
+        self.assertTrue(isinstance(file.instance, JSON))
 
     def test_list_json_file(self):
         file = PyFileInfo(os.path.join(DATA_ROOT, 'list.json'))
-        self.assertTrue(isinstance(file.instance, Json))
+        self.assertTrue(isinstance(file.instance, JSON))
 
     def test_is_json(self):
         file = PyFileInfo(os.path.join(DATA_ROOT, 'list.json'))
