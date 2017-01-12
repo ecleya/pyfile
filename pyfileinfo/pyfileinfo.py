@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import yaml
 import filecmp
 import hashlib
 import pycountry
@@ -13,7 +14,7 @@ from PIL import Image as PILImage
 from collections.abc import Sequence
 
 
-__all__ = ['PyFileInfo', 'File', 'Directory', 'Json', 'Image', 'Medium']
+__all__ = ['PyFileInfo', 'File', 'Directory', 'JSON', 'Image', 'Medium', 'YAML']
 
 
 class PyFileInfo(Sequence):
@@ -171,7 +172,7 @@ class Directory(File):
         return sum([file.size for file in self.files_in(include_hidden_file=True)])
 
 
-class Json(File, Sequence):
+class JSON(File, Sequence):
     def __init__(self, file_path):
         File.__init__(self, file_path)
         Sequence.__init__(self)
@@ -190,6 +191,10 @@ class Json(File, Sequence):
         return len(self.instance)
 
     @staticmethod
+    def hint():
+        return ['.json']
+
+    @staticmethod
     def is_valid(path):
         try:
             json.load(open(path))
@@ -202,6 +207,45 @@ class Json(File, Sequence):
     def instance(self):
         if self._instance is None:
             self._instance = json.load(open(self.path))
+
+        return self._instance
+
+
+class YAML(File, Sequence):
+    def __init__(self, file_path):
+        File.__init__(self, file_path)
+        Sequence.__init__(self)
+
+        self._instance = None
+
+    def __str__(self):
+        return '%s\n%s' % (self.path,
+                           json.dumps(self.instance, indent=4, separators=(',', ': '),
+                                      ensure_ascii=False, sort_keys=True))
+
+    def __getitem__(self, item):
+        return self.instance[item]
+
+    def __len__(self):
+        return len(self.instance)
+
+    @staticmethod
+    def hint():
+        return ['.yml']
+
+    @staticmethod
+    def is_valid(path):
+        try:
+            yaml.load(open(path))
+        except Exception as e:
+            return False
+
+        return True
+
+    @property
+    def instance(self):
+        if self._instance is None:
+            self._instance = yaml.load(open(self.path))
 
         return self._instance
 
@@ -537,7 +581,7 @@ def _custom_subclasses():
 
 
 def _default_subclasses():
-    return [Json, Image, Medium, Directory]
+    return [JSON, Image, Medium, Directory]
 
 
 def _which(name):

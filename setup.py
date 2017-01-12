@@ -17,6 +17,7 @@ def version():
 requirements = [
     'pillow',
     'pycountry',
+    'pyaml',
 ]
 
 setup(
