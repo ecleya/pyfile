@@ -5,7 +5,7 @@ from pyfileinfo import PyFileInfo, YAML
 from tests import DATA_ROOT
 
 
-class TestJSON(unittest.TestCase):
+class TestYAML(unittest.TestCase):
     def test_dict_yaml_file(self):
         file = PyFileInfo(os.path.join(DATA_ROOT, 'dict.yml'))
         self.assertTrue(isinstance(file.instance, YAML))
@@ -28,3 +28,7 @@ class TestJSON(unittest.TestCase):
     def test_yaml_act_like_list(self):
         file = PyFileInfo(os.path.join(DATA_ROOT, 'list.yml'))
         self.assertEqual(file[0], {'age': 33, 'name': 'John Smith'})
+
+    def test_call_dict_method(self):
+        file = PyFileInfo(os.path.join(DATA_ROOT, 'dict.yml'))
+        self.assertEqual(len(file.items()), 2)
