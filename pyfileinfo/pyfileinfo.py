@@ -190,6 +190,9 @@ class JSON(File, Sequence):
     def __len__(self):
         return len(self.instance)
 
+    def __getattr__(self, item):
+        return getattr(self.instance, item)
+
     @staticmethod
     def hint():
         return ['.json']
@@ -228,6 +231,9 @@ class YAML(File, Sequence):
 
     def __len__(self):
         return len(self.instance)
+
+    def __getattr__(self, item):
+        return getattr(self.instance, item)
 
     @staticmethod
     def hint():
