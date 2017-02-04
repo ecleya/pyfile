@@ -1,3 +1,4 @@
 pillow
 pycountry
 pyaml
+pymediainfo

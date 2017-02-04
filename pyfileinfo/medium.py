@@ -1,9 +1,8 @@
 import os
 import pycountry
-import subprocess
+from pymediainfo import MediaInfo
 from fractions import Fraction
 from pyfileinfo.file import File
-from xml.etree import ElementTree
 
 
 class Medium(File):
@@ -16,103 +15,78 @@ class Medium(File):
         self._duration = None
         self._mean_volume = None
 
-        mediainfo_path = _which('mediainfo')
-        cmd = [mediainfo_path, '--Output=XML', '-f', self.path]
-        out, _ = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-        self._xml_root = ElementTree.fromstring(out.decode('utf8', errors='ignore'))
-
-    @staticmethod
-    def from_path(file_path):
-        if os.path.isdir(file_path):
-            return None
-
-        try:
-            medium = Medium(file_path)
-            if len(medium.video_tracks) > 0 or len(medium.audio_tracks) > 0:
-                return medium
-
-            return None
-        except:
-            return None
+        self._mediainfo = None
 
     @staticmethod
     def is_valid(path):
-        if os.path.isdir(path):
+        if os.path.getsize(path) == 0:  # mediainfo can't handle empty file.
             return False
 
-        try:
-            medium = Medium(path)
-        except:
-            return False
-
+        medium = Medium(path)
         return len(medium.video_tracks) > 0 or len(medium.audio_tracks) > 0
 
     @property
-    def xml_root(self):
-        return self._xml_root
+    def mediainfo(self):
+        if self._mediainfo is None:
+            self._mediainfo = MediaInfo.parse(self.path)
+
+        return self._mediainfo
 
     @property
     def title(self):
-        return self.xml_root.find('File').find('track').find('Title').text
+        return self.mediainfo.tracks[0].title
 
     @property
     def album(self):
-        return self.xml_root.find('File').find('track').find('Album').text
+        return self.mediainfo.tracks[0].album
 
     @property
     def album_performer(self):
-        if self.xml_root.find('File').find('track').find('Album_Performer') is None:
-            return None
-
-        return self.xml_root.find('File').find('track').find('Album_Performer').text
+        return self.mediainfo.tracks[0].album_performer
 
     @property
     def performer(self):
-        return self.xml_root.find('File').find('track').find('Performer').text
+        return self.mediainfo.tracks[0].performer
 
     @property
     def track_name(self):
-        return self.xml_root.find('File').find('track').find('Track_name').text
+        return self.mediainfo.tracks[0].track_name
 
     @property
     def track_name_position(self):
-        return self.xml_root.find('File').find('track').find('Track_name_Position').text
+        return self.mediainfo.tracks[0].track_name_position
 
     @property
     def part_position(self):
-        return self.xml_root.find('File').find('track').find('Part_Position').text
+        return self.mediainfo.tracks[0].part_position
 
     @property
     def video_tracks(self):
         if self._video_tracks is None:
-            tracks = [track for track in self.xml_root.find('File').findall('track')]
-            self._video_tracks = [_VideoTrack(element) for element in tracks
-                                  if element.attrib['type'] == 'Video']
+            self._video_tracks = [_VideoTrack(track) for track in self.mediainfo.tracks
+                                  if track.track_type == 'Video']
 
         return self._video_tracks
 
     @property
     def audio_tracks(self):
         if self._audio_tracks is None:
-            tracks = [track for track in self.xml_root.find('File').findall('track')]
-            self._audio_tracks = [_AudioTrack(element) for element in tracks
-                                  if element.attrib['type'] == 'Audio']
+            self._audio_tracks = [_AudioTrack(track) for track in self.mediainfo.tracks
+                                  if track.track_type == 'Audio']
 
         return self._audio_tracks
 
     @property
     def subtitle_tracks(self):
         if self._subtitle_tracks is None:
-            tracks = [track for track in self.xml_root.find('File').findall('track')]
-            self._subtitle_tracks = [_SubtitleTrack(element) for element in tracks
-                                     if element.attrib['type'] == 'Text']
+            self._subtitle_tracks = [_SubtitleTrack(track) for track in self.mediainfo.tracks
+                                     if track.track_type == 'Text']
 
         return self._subtitle_tracks
 
     @property
     def chapters(self):
-        tracks = [track for track in self.xml_root.find('File').findall('track')
-                  if track.attrib['type'] == 'Menu']
+        tracks = [track for track in self.mediainfo.tracks if track.track_type == 'Menu']
 
         if len(tracks) == 0:
             return [{'Number': 1, 'Start': 0, 'Duration': self.duration}]
@@ -120,11 +94,14 @@ class Medium(File):
         chapters = []
         chapter_number = 1
 
-        for element in tracks[0]:
-            if len(element.tag.split('_')) != 4:
+        for timing in dir(tracks[0]):
+            if len(timing.split('_')) != 3:
                 continue
 
-            _, hour, minutes, seconds = element.tag.split('_')
+            hour, minutes, seconds = timing.split('_')
+            if not hour.isdigit():
+                continue
+
             chapters.append({'Number': chapter_number,
                              'Start': float(hour)*3600 + float(minutes)*60 + float(seconds)/1000,
                              'Duration': None})
@@ -163,7 +140,7 @@ class Medium(File):
 
     @property
     def duration(self):
-        return float(self.xml_root.find('File').find('track').find('Duration').text)/1000
+        return float(self.mediainfo.tracks[0].duration)/1000
 
     @staticmethod
     def hint():
@@ -183,70 +160,50 @@ class Medium(File):
 
 
 class _Track:
-    def __init__(self, element):
-        self._element = element
+    def __init__(self, track):
+        self._track = track
+
+    def __getattr__(self, item):
+        return getattr(self._track, item)
 
     @property
     def stream_id(self):
-        return min([int(sid.text) for sid in self._element.findall('Stream_identifier')])
+        return self.stream_identifier
 
     @property
     def language(self):
-        for tag in self._element.findall('Language'):
-            try:
-                return pycountry.languages.get(name=tag.text)
-            except:
-                pass
+        if self._track.language is None:
+            return None
 
-        return None
+        return pycountry.languages.get(alpha_2=self._track.language)
 
 
 class _VideoTrack(_Track):
     @property
     def codec(self):
-        return self._element.find('Codec').text
+        return self._track.codec
 
     @property
     def display_aspect_ratio(self):
-        values = [tag.text for tag in self._element.findall('Display_aspect_ratio')]
-        for value in values:
-            if ':' in value:
-                return value
+        for aspect_ratio in self.other_display_aspect_ratio:
+            if ':' in aspect_ratio:
+                return aspect_ratio
 
-        if len(values) == 0:
-            return None
-
-        return values[0]
-
-    @property
-    def width(self):
-        return int(self._element.find('Width').text)
-
-    @property
-    def height(self):
-        return int(self._element.find('Height').text)
+        return self.other_display_aspect_ratio[0]
 
     @property
     def display_width(self):
-        aspect_ratio = self.display_aspect_ratio
-        if ':' in aspect_ratio:
-            w_ratio, h_ratio = self.display_aspect_ratio.split(':')
-        else:
-            fraction = Fraction(self.display_aspect_ratio)
-            w_ratio, h_ratio = fraction.numerator, fraction.denominator
+        w_ratio, h_ratio = self.display_aspect_ratio.split(':')
 
         return int(self.height * Fraction(w_ratio) / Fraction(h_ratio))
 
     @property
     def display_height(self):
-        return int(self._element.find('Height').text)
+        return self.height
 
     @property
     def interlaced(self):
-        if self._element.find('Scan_type') is None:
-            return False
-
-        return self._element.find('Scan_type').text != 'Progressive'
+        return self.scan_type != 'Progressive'
 
     @property
     def progressive(self):
@@ -254,44 +211,22 @@ class _VideoTrack(_Track):
 
     @property
     def frame_rate(self):
-        if self._element.find('Frame_rate') is None:
-            return float(self._element.find('Original_frame_rate').text)
-
-        return float(self._element.find('Frame_rate').text)
+        return self._track.frame_rate
 
     @property
     def frame_count(self):
-        return int(self._element.find('Frame_count').text)
+        return self._track.frame_count
 
 
 class _AudioTrack(_Track):
     @property
     def codec(self):
-        return self._element.find('Codec').text
+        return self._track.codec
 
     @property
     def channels(self):
-        return self._element.find('Channel_s_').text
-
-    @property
-    def compression_mode(self):
-        if self._element.find('Compression_mode') is None:
-            return None
-
-        return self._element.find('Compression_mode').text
+        return self.channel_s
 
 
 class _SubtitleTrack(_Track):
-    @property
-    def format(self):
-        return self._element.find('Format').text
-
-
-def _which(name):
-    folders = os.environ.get('PATH', os.defpath).split(':')
-    for folder in folders:
-        file_path = os.path.join(folder, name)
-        if os.path.exists(file_path) and os.access(file_path, os.X_OK):
-            return file_path
-
-    return None
+    pass

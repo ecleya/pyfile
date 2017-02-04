@@ -70,7 +70,6 @@ class PyFileInfo(Sequence):
             classes = sorted(File.__subclasses__(),
                              key=lambda class_: self.extension in class_.hint(),
                              reverse=True)
-
             self._instance = File(self.path)
             for class_ in classes:
                 if not class_.is_valid(self.path):

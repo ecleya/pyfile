@@ -1,5 +1,5 @@
 import os
-from pyfileinfo import File
+from pyfileinfo import PyFileInfo, File
 
 
 class Directory(File):
@@ -11,7 +11,6 @@ class Directory(File):
         return os.path.isdir(path)
 
     def files_in(self, include_hidden_file=False, recursive=False):
-        from pyfileinfo import PyFileInfo
         files = [PyFileInfo(os.path.join(self.path, filename))
                  for filename in os.listdir(self.path)]
         files.sort()
