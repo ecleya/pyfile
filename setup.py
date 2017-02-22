@@ -18,6 +18,7 @@ requirements = [
     'pillow',
     'pycountry',
     'pyaml',
+    'pymediainfo',
 ]
 
 setup(
