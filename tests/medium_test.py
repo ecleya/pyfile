@@ -84,6 +84,14 @@ class TestMedium(unittest.TestCase):
         medium = PyFileInfo('starwars-ep3.mp4')
         self.assertEqual(len(medium.chapters), 50)
 
+    @mock.patch('pymediainfo.MediaInfo.parse')
+    @mock.patch('os.path.getsize')
+    def test_track_name(self, mock_size, mock_mediainfo):
+        self._set_mediainfo_as_pooq(mock_size, mock_mediainfo)
+
+        medium = PyFileInfo('pooq.mp4')
+        self.assertEqual(medium.subtitle_tracks[0].title, 'subtitle')
+
     def _set_mediainfo_as_pooq(self, mock_size, mock_mediainfo):
         media_xml = open(os.path.join(DATA_ROOT, 'mediainfo/pooq.xml')).read()
         mock_mediainfo.return_value = MediaInfo(media_xml)

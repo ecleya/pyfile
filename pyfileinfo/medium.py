@@ -167,6 +167,13 @@ class _Track:
         return getattr(self._track, item)
 
     @property
+    def title(self):
+        if self._element.find('Title') is None:
+            return None
+
+        return self._element.find('Title').text
+
+    @property
     def stream_id(self):
         return self.stream_identifier
 
