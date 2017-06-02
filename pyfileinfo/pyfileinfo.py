@@ -109,4 +109,4 @@ class PyFileInfo(Sequence):
             for buf in iter(partial(f.read, 128), b''):
                 digest.update(buf)
 
-        return digest.digest()
+        return digest.hexdigest()
