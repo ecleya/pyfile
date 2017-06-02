@@ -16,16 +16,16 @@ class TestDirectory(unittest.TestCase):
 
     def test_files_in(self):
         file = PyFileInfo(DATA_ROOT)
-        self.assertEqual(len(list(file.files_in())), 8)
+        self.assertEqual(len(list(file.files_in())), 9)
 
     def test_recursive_files_in(self):
         file = PyFileInfo(DATA_ROOT)
-        self.assertEqual(len(list(file.files_in(recursive=True))), 14)
+        self.assertEqual(len(list(file.files_in(recursive=True))), 15)
 
     def test_hidden_file(self):
         file = PyFileInfo(DATA_ROOT)
-        self.assertEqual(len(list(file.files_in(include_hidden_file=True))), 9)
+        self.assertEqual(len(list(file.files_in(include_hidden_file=True))), 10)
 
     def test_size(self):
         file = PyFileInfo(os.path.join(DATA_ROOT))
-        self.assertEqual(file.size, 128135)
+        self.assertEqual(file.size, 128149)

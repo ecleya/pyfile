@@ -37,3 +37,7 @@ class TestFile(unittest.TestCase):
 
         self.assertTrue(file1 != file2)
         self.assertTrue(file1 != os.path.join(DATA_ROOT, 'text_files', 'diff_size.txt'))
+
+    def test_md5(self):
+        md5 = PyFileInfo(os.path.join(DATA_ROOT, 'md5_bc67678e92933a5f1c60ac5a7f65f9bb'))
+        self.assertEqual(md5.md5, 'bc67678e92933a5f1c60ac5a7f65f9bb')

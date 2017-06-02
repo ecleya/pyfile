@@ -167,6 +167,17 @@ class _Track:
         return getattr(self._track, item)
 
     @property
+    def title(self):
+        if self._element.find('Title') is None:
+            return None
+
+        return self._element.find('Title').text
+
+    @property
+    def codec(self):
+        return self._track.codec
+
+    @property
     def stream_id(self):
         return self.stream_identifier
 
@@ -179,10 +190,6 @@ class _Track:
 
 
 class _VideoTrack(_Track):
-    @property
-    def codec(self):
-        return self._track.codec
-
     @property
     def display_aspect_ratio(self):
         for aspect_ratio in self.other_display_aspect_ratio:
@@ -219,10 +226,6 @@ class _VideoTrack(_Track):
 
 
 class _AudioTrack(_Track):
-    @property
-    def codec(self):
-        return self._track.codec
-
     @property
     def channels(self):
         return self.channel_s
