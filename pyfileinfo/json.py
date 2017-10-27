@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import json
 from collections.abc import Sequence
 from pyfileinfo.file import File

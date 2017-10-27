@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import yaml
 from collections.abc import Sequence
 from pyfileinfo.file import File
