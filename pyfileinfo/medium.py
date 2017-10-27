@@ -4,7 +4,8 @@ import os
 import pycountry
 from pymediainfo import MediaInfo
 from fractions import Fraction
-from pyfileinfo.file import File
+
+from .file import File
 
 
 class Medium(File):

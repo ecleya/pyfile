@@ -6,8 +6,12 @@ import filecmp
 import hashlib
 import unicodedata
 from functools import partial
-from pyfileinfo.file import File
-from collections.abc import Sequence
+try:
+    from collections.abc import Sequence
+except ImportError:
+    from collections import Sequence
+
+from .file import File
 
 
 class PyFileInfo(Sequence):

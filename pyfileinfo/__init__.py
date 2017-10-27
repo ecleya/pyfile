@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from pyfileinfo.pyfileinfo import PyFileInfo
-from pyfileinfo.file import File
-from pyfileinfo.directory import Directory
-from pyfileinfo.image import Image
-from pyfileinfo.json import JSON
-from pyfileinfo.medium import Medium
-from pyfileinfo.yaml import YAML
+from .pyfileinfo import PyFileInfo
+from .file import File
+from .directory import Directory
+from .image import Image
+from .json import JSON
+from .medium import Medium
+from .yaml import YAML
 
 
 __all__ = ['PyFileInfo', 'File', 'Directory', 'Image', 'JSON', 'Medium', 'YAML']

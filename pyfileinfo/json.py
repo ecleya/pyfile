@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import json
-from collections.abc import Sequence
-from pyfileinfo.file import File
+try:
+    from collections.abc import Sequence
+except ImportError:
+    from collections import Sequence
+
+from .file import File
 
 
 class JSON(File, Sequence):

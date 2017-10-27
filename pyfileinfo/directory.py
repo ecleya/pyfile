@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-from pyfileinfo import PyFileInfo, File
+
+from . import PyFileInfo, File
 
 
 class Directory(File):
