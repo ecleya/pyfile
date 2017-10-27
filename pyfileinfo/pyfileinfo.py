@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-<<<<<<< HEAD
+from __future__ import unicode_literals
 
-=======
->>>>>>> 947fc3c... fmu backport
 import os
 import re
 import filecmp

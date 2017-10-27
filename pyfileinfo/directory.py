@@ -24,8 +24,9 @@ class Directory(File):
 
             yield file
             if recursive and file.is_directory():
-                yield from file.files_in(include_hidden_file=include_hidden_file,
-                                         recursive=recursive)
+                for sub_file in file.files_in(include_hidden_file=include_hidden_file,
+                                              recursive=recursive):
+                    yield sub_file
 
     @property
     def size(self):
