@@ -20,7 +20,7 @@ class PyFileInfo(Sequence):
             def to_int_if_possible(c):
                 try:
                     return int(c)
-                except:
+                except:  # noqa: E722
                     return c.lower()
 
             return [to_int_if_possible(c) for c in re.split('([0-9]+)', file_path)]
