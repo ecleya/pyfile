@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+from io import open
 try:
     from collections.abc import Sequence
 except ImportError:
@@ -37,7 +38,7 @@ class JSON(File, Sequence):
     @staticmethod
     def is_valid(path):
         try:
-            json.load(open(path))
+            json.load(open(path, encoding='utf8'))
         except Exception as e:
             return False
 

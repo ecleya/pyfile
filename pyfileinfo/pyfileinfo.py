@@ -6,8 +6,9 @@ import re
 import filecmp
 import hashlib
 import unicodedata
-from functools import partial
+from io import open
 from builtins import str
+from functools import partial
 try:
     from collections.abc import Sequence
 except ImportError:

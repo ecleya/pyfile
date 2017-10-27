@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import yaml
+from io import open
 try:
     from collections.abc import Sequence
 except ImportError:
@@ -35,7 +36,7 @@ class YAML(File, Sequence):
     @staticmethod
     def is_valid(path):
         try:
-            yaml.load(open(path))
+            yaml.load(open(path, encoding='utf8'))
         except Exception as e:
             return False
 
@@ -44,6 +45,6 @@ class YAML(File, Sequence):
     @property
     def instance(self):
         if self._instance is None:
-            self._instance = yaml.load(open(self.path))
+            self._instance = yaml.load(open(self.path, encoding='utf8'))
 
         return self._instance

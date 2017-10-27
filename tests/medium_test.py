@@ -2,6 +2,7 @@
 
 import os
 import unittest
+from io import open
 
 import mock
 
