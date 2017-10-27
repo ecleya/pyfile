@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
+<<<<<<< HEAD
 
+=======
+>>>>>>> 947fc3c... fmu backport
 import os
 import re
 import filecmp
 import hashlib
 import unicodedata
 from functools import partial
+from builtins import str
 try:
     from collections.abc import Sequence
 except ImportError:
@@ -18,7 +22,7 @@ class PyFileInfo(Sequence):
     def __init__(self, path):
         Sequence.__init__(self)
 
-        self._path = unicodedata.normalize('NFC', path)
+        self._path = unicodedata.normalize('NFC', str(path))
         self._instance = None
 
     def __lt__(self, other):

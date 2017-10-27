@@ -2,7 +2,8 @@
 
 import os
 import unittest
-from unittest import mock
+
+import mock
 
 from pymediainfo import MediaInfo
 from pyfileinfo import PyFileInfo, Medium

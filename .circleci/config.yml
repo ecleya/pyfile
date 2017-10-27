@@ -9,8 +9,7 @@ jobs:
       - checkout
       - run: sudo apt-get install mediainfo
       - run: sudo pip install --upgrade pip
-      - run: sudo pip install -r requirements.txt
-      - run: sudo pip install pytest pytest-cov flake8 unittest-xml-reporting
+      - run: sudo pip install -e .[test]
       - run: pytest
       - run: flake8
   test-python2.7:
@@ -22,8 +21,7 @@ jobs:
       - checkout
       - run: sudo apt-get install mediainfo
       - run: sudo pip install --upgrade pip
-      - run: sudo pip install -r requirements.txt
-      - run: sudo pip install pytest pytest-cov flake8 unittest-xml-reporting
+      - run: sudo pip install -e .[test]
       - run: pytest
       - run: flake8
 workflows:
