@@ -37,7 +37,7 @@ class YAML(File, Sequence):
     def is_valid(path):
         try:
             yaml.load(open(path, encoding='utf8'))
-        except Exception as e:
+        except Exception:  # noqa: E722
             return False
 
         return True

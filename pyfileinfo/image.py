@@ -25,7 +25,7 @@ class Image(File):
         try:
             from PIL import Image as PILImage
             PILImage.open(path)
-        except Exception as e:
+        except Exception:  # noqa: E722
             return False
 
         return True
