@@ -14,6 +14,8 @@ try:
 except ImportError:
     from collections import Sequence
 
+from six import string_types
+
 from .file import File
 
 
@@ -40,18 +42,12 @@ class PyFileInfo(Sequence):
         return self._path.__hash__()
 
     def __eq__(self, other):
-        print('Compare~')
-        print(self.path, type(other))
-        if type(other) is str:
-            print('Yeah~ String')
+        if isinstance(other, string_types):
             return filecmp.cmp(self.path, other, False)
 
         if isinstance(other, PyFileInfo):
-            print('Yeah~ PyFile~')
-            print(other.path)
             return filecmp.cmp(self.path, other.path, False)
 
-        print('No~')
         return False
 
     def __str__(self):
