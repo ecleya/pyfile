@@ -4,9 +4,9 @@ from .pyfileinfo import PyFileInfo
 from .file import File
 from .directory import Directory
 from .image import Image
-from .json import JSON
+from .jsonfile import JSON
 from .medium import Medium
-from .yaml import YAML
+from .yamlfile import YAML
 
 
 __all__ = ['PyFileInfo', 'File', 'Directory', 'Image', 'JSON', 'Medium', 'YAML']
