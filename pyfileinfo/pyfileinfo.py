@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 from __future__ import unicode_literals
 
 import os
@@ -16,7 +17,7 @@ except ImportError:
 
 from six import string_types
 
-from .file import File
+from pyfileinfo.file import File
 
 
 class PyFileInfo(Sequence):

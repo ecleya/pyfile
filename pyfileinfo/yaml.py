@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
+
 import yaml
 from io import open
 try:
@@ -7,7 +9,7 @@ try:
 except ImportError:
     from collections import Sequence
 
-from .file import File
+from pyfileinfo.file import File
 
 
 class YAML(File, Sequence):

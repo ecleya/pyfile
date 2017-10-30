@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import
 from PIL import Image as PILImage
 
-from .file import File
+from pyfileinfo.file import File
 
 
 class Image(File):
