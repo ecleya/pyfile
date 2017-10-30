@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import absolute_import
+
 from pyfileinfo.pyfileinfo import PyFileInfo
 from pyfileinfo.file import File
 from pyfileinfo.directory import Directory

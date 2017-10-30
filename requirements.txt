@@ -1,4 +1,1 @@
-pillow
-pycountry
-pyaml
-pymediainfo
+-e .

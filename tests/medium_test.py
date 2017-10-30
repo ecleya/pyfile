@@ -1,6 +1,10 @@
+# -*- coding: utf-8 -*-
+
 import os
 import unittest
-from unittest import mock
+from io import open
+
+import mock
 
 from pymediainfo import MediaInfo
 from pyfileinfo import PyFileInfo, Medium
@@ -101,13 +105,15 @@ class TestMedium(unittest.TestCase):
         self.assertEqual(medium.subtitle_tracks[0].codec, 'S_HDMV/PGS')
 
     def _set_mediainfo_as_pooq(self, mock_size, mock_mediainfo):
-        media_xml = open(os.path.join(DATA_ROOT, 'mediainfo/pooq.xml')).read()
+        xml_path = os.path.join(DATA_ROOT, 'mediainfo/pooq.xml')
+        media_xml = open(xml_path, encoding='utf-8').read()
         mock_mediainfo.return_value = MediaInfo(media_xml)
 
         mock_size.return_value = 3270214572  # file size
 
     def _set_mediainfo_as_starwars_ep3(self, mock_size, mock_mediainfo):
-        media_xml = open(os.path.join(DATA_ROOT, 'mediainfo/star_wars_e_3.xml')).read()
+        xml_path = os.path.join(DATA_ROOT, 'mediainfo/star_wars_e_3.xml')
+        media_xml = open(xml_path, encoding='utf-8').read()
         mock_mediainfo.return_value = MediaInfo(media_xml)
 
         mock_size.return_value = 39074393952  # file size

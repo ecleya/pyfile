@@ -1,4 +1,8 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import absolute_import
 from PIL import Image as PILImage
+
 from pyfileinfo.file import File
 
 
@@ -22,7 +26,7 @@ class Image(File):
         try:
             from PIL import Image as PILImage
             PILImage.open(path)
-        except Exception as e:
+        except Exception:  # noqa: E722
             return False
 
         return True

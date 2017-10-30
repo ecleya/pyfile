@@ -1,5 +1,14 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import absolute_import
+
 import json
-from collections.abc import Sequence
+from io import open
+try:
+    from collections.abc import Sequence
+except ImportError:
+    from collections import Sequence
+
 from pyfileinfo.file import File
 
 
@@ -31,8 +40,8 @@ class JSON(File, Sequence):
     @staticmethod
     def is_valid(path):
         try:
-            json.load(open(path))
-        except Exception as e:
+            json.load(open(path, encoding='utf8'))
+        except Exception:  # noqa: E722
             return False
 
         return True

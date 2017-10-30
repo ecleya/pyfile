@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
+
 import os
 
 
-class File:
+class File(object):
     def __init__(self, path):
         self._path = path
 

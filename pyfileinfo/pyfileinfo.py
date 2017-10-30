@@ -1,18 +1,30 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import unicode_literals
+
 import os
 import re
 import filecmp
 import hashlib
 import unicodedata
+from io import open
+from builtins import str
 from functools import partial
+try:
+    from collections.abc import Sequence
+except ImportError:
+    from collections import Sequence
+
+from six import string_types
+
 from pyfileinfo.file import File
-from collections.abc import Sequence
 
 
 class PyFileInfo(Sequence):
     def __init__(self, path):
         Sequence.__init__(self)
 
-        self._path = unicodedata.normalize('NFC', path)
+        self._path = unicodedata.normalize('NFC', str(path))
         self._instance = None
 
     def __lt__(self, other):
@@ -20,7 +32,7 @@ class PyFileInfo(Sequence):
             def to_int_if_possible(c):
                 try:
                     return int(c)
-                except:
+                except:  # noqa: E722
                     return c.lower()
 
             return [to_int_if_possible(c) for c in re.split('([0-9]+)', file_path)]
@@ -31,7 +43,7 @@ class PyFileInfo(Sequence):
         return self._path.__hash__()
 
     def __eq__(self, other):
-        if type(other) is str:
+        if isinstance(other, string_types):
             return filecmp.cmp(self.path, other, False)
 
         if isinstance(other, PyFileInfo):
