@@ -172,19 +172,12 @@ class _Track:
         return getattr(self._track, item)
 
     @property
-    def title(self):
-        if self._element.find('Title') is None:
-            return None
-
-        return self._element.find('Title').text
-
-    @property
-    def codec(self):
-        return self._track.codec
-
-    @property
     def stream_id(self):
         return self.stream_identifier
+
+    @property
+    def streamorder(self):
+        return int(self._track.streamorder)
 
     @property
     def language(self):

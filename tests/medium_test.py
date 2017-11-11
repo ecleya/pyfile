@@ -20,6 +20,18 @@ class TestMedium(unittest.TestCase):
         medium = PyFileInfo(os.path.join(DATA_ROOT, 'empty.mp4'))
         self.assertTrue(medium.is_medium())
 
+    def test_notitle(self):
+        medium = PyFileInfo(os.path.join(DATA_ROOT, 'empty.mp4'))
+        self.assertIsNone(medium.title)
+
+    @mock.patch('pymediainfo.MediaInfo.parse')
+    @mock.patch('os.path.getsize')
+    def test_title(self, mock_size, mock_mediainfo):
+        self._set_mediainfo_as_starwars_ep3(mock_size, mock_mediainfo)
+
+        medium = PyFileInfo('starwars-ep3.mp4')
+        self.assertEqual(medium.title, 'Revenge of the Sith')
+
     @mock.patch('pymediainfo.MediaInfo.parse')
     @mock.patch('os.path.getsize')
     def test_run_script(self, mock_size, mock_mediainfo):
@@ -94,6 +106,7 @@ class TestMedium(unittest.TestCase):
         self._set_mediainfo_as_pooq(mock_size, mock_mediainfo)
 
         medium = PyFileInfo('pooq.mp4')
+        self.assertIsNone(medium.video_tracks[0].title)
         self.assertEqual(medium.subtitle_tracks[0].title, 'subtitle')
 
     @mock.patch('pymediainfo.MediaInfo.parse')
@@ -103,6 +116,28 @@ class TestMedium(unittest.TestCase):
 
         medium = PyFileInfo('starwars-ep3.mp4')
         self.assertEqual(medium.subtitle_tracks[0].codec, 'S_HDMV/PGS')
+
+    @mock.patch('pymediainfo.MediaInfo.parse')
+    @mock.patch('os.path.getsize')
+    def test_track_id(self, mock_size, mock_mediainfo):
+        self._set_mediainfo_as_starwars_ep3(mock_size, mock_mediainfo)
+
+        medium = PyFileInfo('starwars-ep3.mp4')
+        self.assertEqual(medium.video_tracks[0].track_id, 1)
+        self.assertEqual(medium.audio_tracks[0].track_id, 2)
+        self.assertEqual(medium.subtitle_tracks[0].track_id, 8)
+        self.assertEqual(medium.subtitle_tracks[1].track_id, 10)
+
+    @mock.patch('pymediainfo.MediaInfo.parse')
+    @mock.patch('os.path.getsize')
+    def test_streamorder(self, mock_size, mock_mediainfo):
+        self._set_mediainfo_as_starwars_ep3(mock_size, mock_mediainfo)
+
+        medium = PyFileInfo('starwars-ep3.mp4')
+        self.assertEqual(medium.video_tracks[0].streamorder, 0)
+        self.assertEqual(medium.audio_tracks[0].streamorder, 1)
+        self.assertEqual(medium.subtitle_tracks[0].streamorder, 7)
+        self.assertEqual(medium.subtitle_tracks[1].streamorder, 8)
 
     def _set_mediainfo_as_pooq(self, mock_size, mock_mediainfo):
         xml_path = os.path.join(DATA_ROOT, 'mediainfo/pooq.xml')
