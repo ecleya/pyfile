@@ -20,3 +20,7 @@ class TestImage(unittest.TestCase):
         image = PyFileInfo(os.path.join(DATA_ROOT, '5x5.jpg'))
         self.assertEqual(image.width, 5)
         self.assertEqual(image.height, 5)
+
+    def test_resolution(self):
+        image = PyFileInfo(os.path.join(DATA_ROOT, '5x5.jpg'))
+        self.assertEqual(image.resolution, (5, 5))
