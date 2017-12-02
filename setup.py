@@ -22,6 +22,7 @@ REQUIREMENTS = [
     'pyaml',
     'pymediainfo',
     'future',
+    'six',
 ]
 
 EXTRAS_REQUIRE = {
